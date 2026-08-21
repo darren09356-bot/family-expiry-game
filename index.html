@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>惠心的全家效期排面小練習</title>
+    <style>
+        body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background-color: #eef7f2; text-align: center; padding: 15px; margin: 0; }
+        .card { background: white; border-radius: 16px; padding: 20px; max-width: 600px; margin: 0 auto; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        h1 { color: #00873c; font-size: 24px; margin-top: 5px; margin-bottom: 15px; }
+        
+        /* 記分板樣式 */
+        .score-board { display: flex; justify-content: space-around; background: #e8f5e9; border: 2px solid #a5d6a7; border-radius: 12px; padding: 12px; margin-bottom: 15px; }
+        .score-item { font-size: 16px; font-weight: bold; color: #2e7d32; }
+        .score-num { font-size: 22px; color: #00873c; display: block; margin-top: 4px; }
+        
+        .rule-box { background: #fff3e0; border: 2px dashed #ff9800; padding: 10px; border-radius: 8px; font-size: 15px; margin-bottom: 15px; color: #e65100; }
+        .instruction { font-size: 17px; font-weight: bold; margin: 10px 0; color: #333; }
+        
+        /* 卡片容器 */
+        .tag-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 15px 0; min-height: 55px; }
+        .tag { background: #00873c; color: white; padding: 10px 14px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; user-select: none; }
+        .tag:hover { transform: scale(1.05); }
+        .tag-target { background: #00a0e9; }
+        
+        /* 按鈕區 */
+        .btn-group { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
+        .btn { background: #00873c; color: white; border: none; padding: 12px 20px; border-radius: 25px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        .btn:hover { opacity: 0.9; }
+        .btn-next { background: #00a0e9; }
+        .btn-reset { background: #78909c; }
+        
+        /* 反饋訊息 */
+        .feedback { font-size: 20px; font-weight: bold; margin-top: 15px; min-height: 28px; }
+        .success { color: #2e7d32; }
+        .error { color: #c62828; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>🏪 惠心的全家效期排面練習</h1>
+
+    <!-- 積分統計板 -->
+    <div class="score-board">
+        <div class="score-item">總得分<span class="score-num" id="total-score">0</span></div>
+        <div class="score-item">答對題數<span class="score-num" style="color:#2e7d32;" id="correct-count">0</span></div>
+        <div class="score-item">答錯題數<span class="score-num" style="color:#c62828;" id="wrong-count">0</span></div>
+    </div>
+    
+    <div class="rule-box">
+        💡 <b>排面口訣：</b> 數字小的放<b>前面（先賣）</b> ⬅️ ｜ 數字大的放<b>後面（後賣）</b> ➡️
+    </div>
+
+    <div class="instruction">請點擊卡片，將 6 個日期由<b>「小排到大」</b>：</div>
+
+    <!-- 待選區 -->
+    <div class="tag-container" id="source-tags"></div>
+    
+    <div class="instruction" style="font-size:15px; color:#666;">你的排序（從左到右）：</div>
+    <!-- 選擇結果區 -->
+    <div class="tag-container" id="target-tags" style="background:#f0f4f8; border-radius:10px; border:2px dashed #bccbde; align-items:center; padding:5px;"></div>
+
+    <div class="btn-group">
+        <button class="btn" id="check-btn" onclick="checkAnswer()">送出檢查</button>
+        <button class="btn btn-next" onclick="generateQuestion()">下一題</button>
+        <button class="btn btn-reset" onclick="resetScore()">重置分數</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+</div>
+
+<script>
+    let currentDates = [];
+    let userAnswers = [];
+    let score = 0;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let isChecked = false; // 防止重複送出同一題加分
+
+    function generateQuestion() {
+        document.getElementById('feedback').innerText = '';
+        document.getElementById('target-tags').innerHTML = '';
+        document.getElementById('check-btn').style.display = 'inline-block';
+        userAnswers = [];
+        isChecked = false;
+        
+        // 隨機生成 6 張不重複的日期卡片 (跨 8 月與 9 月)
+        let dates = [];
+        while(dates.length < 6) {
+            let month = Math.random() > 0.5 ? 8 : 9;
+            let day = Math.floor(Math.random() * 28) + 1;
+            let dateStr = `${month}/${day}`;
+            if (!dates.includes(dateStr)) dates.push(dateStr);
+        }
+        
+        currentDates = [...dates];
+        
+        // 打亂順序顯示
+        let shuffled = [...dates].sort(() => Math.random() - 0.5);
+        
+        const sourceContainer = document.getElementById('source-tags');
+        sourceContainer.innerHTML = '';
+        shuffled.forEach(d => {
+            let div = document.createElement('div');
+            div.className = 'tag';
+            div.innerText = d;
+            div.onclick = () => selectTag(d, div);
+            sourceContainer.appendChild(div);
+        });
+    }
+
+    function selectTag(dateStr, element) {
+        if (element.style.visibility === 'hidden') return;
+        element.style.visibility = 'hidden';
+        userAnswers.push(dateStr);
+
+        const targetContainer = document.getElementById('target-tags');
+        let div = document.createElement('div');
+        div.className = 'tag tag-target';
+        div.innerText = dateStr;
+        
+        // 允許點擊已選卡片退回
+        div.onclick = () => deselectTag(dateStr, element, div);
+        targetContainer.appendChild(div);
+    }
+
+    function deselectTag(dateStr, sourceElement, targetElement) {
+        if (isChecked) return; // 檢查後不能退回
+        sourceElement.style.visibility = 'visible';
+        targetElement.remove();
+        userAnswers = userAnswers.filter(d => d !== dateStr);
+    }
+
+    function checkAnswer() {
+        if (isChecked) return;
+
+        if (userAnswers.length < currentDates.length) {
+            document.getElementById('feedback').className = 'feedback error';
+            document.getElementById('feedback').innerText = '請先選完所有 6 張卡片喔！';
+            return;
+        }
+
+        isChecked = true;
+
+        // 正確日期排序邏輯
+        let sorted = [...currentDates].sort((a, b) => {
+            let [m1, d1] = a.split('/').map(Number);
+            let [m2, d2] = b.split('/').map(Number);
+            return (m1 * 100 + d1) - (m2 * 100 + d2);
+        });
+
+        let isCorrect = JSON.stringify(userAnswers) === JSON.stringify(sorted);
+
+        const feedbackEl = document.getElementById('feedback');
+        if (isCorrect) {
+            score += 10;
+            correctCount += 1;
+            feedbackEl.className = 'feedback success';
+            feedbackEl.innerText = '🎉 太棒了！惠心全對了！獲得 10 分！';
+        } else {
+            wrongCount += 1;
+            feedbackEl.className = 'feedback error';
+            feedbackEl.innerText = '❌ 沒關係再接再厲！正確順序是：' + sorted.join(' ➡️ ');
+        }
+
+        updateScoreBoard();
+    }
+
+    function updateScoreBoard() {
+        document.getElementById('total-score').innerText = score;
+        document.getElementById('correct-count').innerText = correctCount;
+        document.getElementById('wrong-count').innerText = wrongCount;
+    }
+
+    function resetScore() {
+        score = 0;
+        correctCount = 0;
+        wrongCount = 0;
+        updateScoreBoard();
+        generateQuestion();
+    }
+
+    // 初始啟動
+    generateQuestion();
+</script>
+
+</body>
+</html>
