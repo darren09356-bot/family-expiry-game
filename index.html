@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>惠心的全家效期排面練習</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        
+        /* 鎖定手機畫面，禁止捲動 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .app-card {
+            width: 100%;
+            max-width: 430px;
+            height: 100vh;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        /* 標題與資訊欄 */
+        .header { text-align: center; }
+        .title {
+            color: #00873c;
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0 0 6px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .info-bar {
+            background: #f1f8e9;
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .score-group span { font-size: 14px; }
+        .score-val { color: #00873c; font-size: 16px; font-weight: 900; }
+        .correct-val { color: #2e7d32; }
+        .wrong-val { color: #d32f2f; }
+
+        /* 口訣與警示提示 */
+        .rule-badge {
+            background: #fff8e1;
+            border: 1.5px dashed #ffa000;
+            color: #e65100;
+            padding: 6px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .year-warning {
+            background: #fff3e0;
+            border: 1.5px solid #ff9800;
+            color: #e65100;
+            padding: 5px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 6px;
+            display: none;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.8; }
+        }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: 800;
+            color: #424242;
+            margin: 8px 0 4px 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 卡片按鈕區 (3列 2行 網格) */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            min-height: 95px;
+        }
+
+        .date-card {
+            background: linear-gradient(180deg, #009845 0%, #007b36 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 800;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,135,60,0.25);
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .date-card:active { transform: scale(0.95); }
+
+        .date-card-target {
+            background: linear-gradient(180deg, #00a0e9 0%, #0082c3 100%);
+            box-shadow: 0 4px 8px rgba(0,160,233,0.25);
+        }
+
+        /* 下方放置區 */
+        .drop-zone {
+            background: #f5f7fa;
+            border: 2px dashed #b0bec5;
+            border-radius: 14px;
+            padding: 6px;
+            min-height: 106px;
+        }
+
+        /* 底部結果反饋與功能按鈕 */
+        .feedback-area {
+            min-height: 24px;
+            font-size: 14px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .text-success { color: #2e7d32; }
+        .text-error { color: #c62828; }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            flex: 1;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 0;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .btn-check { background: #00873c; color: white; }
+        .btn-next { background: #00a0e9; color: white; }
+        .btn-reset { background: #90a4ae; color: white; flex: 0.6; }
+        .btn-action:active { opacity: 0.85; }
+    </style>
+</head>
+<body>
+
+<div class="app-card">
+    <!-- 頂部區 -->
+    <div class="header">
+        <div class="title">🏪 惠心全家效期排面練習</div>
+        <div class="info-bar">
+            <span id="today-display">📅 今日: --/--</span>
+            <div class="score-group">
+                得分:<span class="score-val" id="total-score">0</span> ｜ 
+                對:<span class="correct-val" id="correct-count">0</span> 
+                錯:<span class="wrong-val" id="wrong-count">0</span>
+            </div>
+        </div>
+        <div class="rule-badge">
+            💡 快過期(數字小)放<b>前面(左)</b> ⬅️ ｜ 還久放<b>後面(右)</b> ➡️
+        </div>
+        <div class="year-warning" id="year-notice">
+            ⚠️ 注意：這題有跨到明年喔！1 月要放在後面！
+        </div>
+    </div>
+
+    <!-- 上方待選卡片區 -->
+    <div>
+        <div class="section-label">👇 請點擊卡片（從近到遠排）：</div>
+        <div class="card-grid" id="source-tags"></div>
+    </div>
+
+    <!-- 下方排序結果區 -->
+    <div>
+        <div class="section-label" style="color:#00a0e9;">📌 你的排序結果：</div>
+        <div class="drop-zone">
+            <div class="card-grid" id="target-tags"></div>
+        </div>
+    </div>
+
+    <!-- 底部控制區 -->
+    <div>
+        <div class="feedback-area" id="feedback"></div>
+        <div class="btn-group">
+            <button class="btn-action btn-check" id="check-btn" onclick="checkAnswer()">送出檢查</button>
+            <button class="btn-action btn-next" onclick="generateQuestion()">下一題</button>
+            <button class="btn-action btn-reset" onclick="resetScore()">重置</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentCards = [];
+    let userAnswers = [];
+    let score = 0;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let isChecked = false;
+
+    const today = new Date();
+    document.getElementById('today-display').innerText = `📅 今日: ${today.getMonth() + 1}/${today.getDate()}`;
+
+    function generateQuestion() {
+        document.getElementById('feedback').innerText = '';
+        document.getElementById('target-tags').innerHTML = '';
+        document.getElementById('year-notice').style.display = 'none';
+        userAnswers = [];
+        isChecked = false;
+        
+        let cards = [];
+        let hasCrossYear = false;
+
+        while(cards.length < 6) {
+            let addDays = Math.floor(Math.random() * 85) + 1;
+            let futureDate = new Date(today.getTime());
+            futureDate.setDate(today.getDate() + addDays);
+
+            let month = futureDate.getMonth() + 1;
+            let date = futureDate.getDate();
+            let displayStr = `${month}/${date}`;
+            
+            if (futureDate.getFullYear() > today.getFullYear()) {
+                hasCrossYear = true;
+            }
+
+            if (!cards.some(c => c.display === displayStr)) {
+                cards.push({
+                    display: displayStr,
+                    timestamp: new Date(futureDate.getFullYear(), futureDate.getMonth(), futureDate.getDate()).getTime()
+                });
+            }
+        }
+
+        if (hasCrossYear) {
+            document.getElementById('year-notice').style.display = 'block';
+        }
+
+        currentCards = [...cards];
+        let shuffled = [...cards].sort(() => Math.random() - 0.5);
+
+        const sourceContainer = document.getElementById('source-tags');
+        sourceContainer.innerHTML = '';
+        shuffled.forEach(cardObj => {
+            let div = document.createElement('div');
+            div.className = 'date-card';
+            div.innerText = cardObj.display;
+            div.onclick = () => selectTag(cardObj, div);
+            sourceContainer.appendChild(div);
+        });
+    }
+
+    function selectTag(cardObj, element) {
+        if (element.style.visibility === 'hidden') return;
+        element.style.visibility = 'hidden';
+        userAnswers.push(cardObj);
+
+        const targetContainer = document.getElementById('target-tags');
+        let div = document.createElement('div');
+        div.className = 'date-card date-card-target';
+        div.innerText = cardObj.display;
+        div.onclick = () => deselectTag(cardObj, element, div);
+        targetContainer.appendChild(div);
+    }
+
+    function deselectTag(cardObj, sourceElement, targetElement) {
+        if (isChecked) return;
+        sourceElement.style.visibility = 'visible';
+        targetElement.remove();
+        userAnswers = userAnswers.filter(c => c.timestamp !== cardObj.timestamp);
+    }
+
+    function checkAnswer() {
+        if (isChecked) return;
+
+        if (userAnswers.length < currentCards.length) {
+            document.getElementById('feedback').className = 'feedback-area text-error';
+            document.getElementById('feedback').innerText = '請先選完所有 6 張卡片喔！';
+            return;
+        }
+
+        isChecked = true;
+
+        let sorted = [...currentCards].sort((a, b) => a.timestamp - b.timestamp);
+        let isCorrect = JSON.stringify(userAnswers.map(c => c.timestamp)) === JSON.stringify(sorted.map(c => c.timestamp));
+
+        const feedbackEl = document.getElementById('feedback');
+        if (isCorrect) {
+            score += 10;
+            correctCount += 1;
+            feedbackEl.className = 'feedback-area text-success';
+            feedbackEl.innerText = '🎉 太棒了！惠心全對了！+10分';
+        } else {
+            wrongCount += 1;
+            feedbackEl.className = 'feedback-area text-error';
+            let sortedDisplays = sorted.map(c => c.display).join(' ➡️ ');
+            feedbackEl.innerText = '❌ 正確順序：' + sortedDisplays;
+        }
+
+        updateScoreBoard();
+    }
+
+    function updateScoreBoard() {
+        document.getElementById('total-score').innerText = score;
+        document.getElementById('correct-count').innerText = correctCount;
+        document.getElementById('wrong-count').innerText = wrongCount;
+    }
+
+    function resetScore() {
+        score = 0;
+        correctCount = 0;
+        wrongCount = 0;
+        updateScoreBoard();
+        generateQuestion();
+    }
+
+    generateQuestion();
+</script>
+
+</body>
+</html>
