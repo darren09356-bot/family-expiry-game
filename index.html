@@ -7,7 +7,6 @@
     <style>
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
         
-        /* 鎖定手機畫面，禁止捲動 */
         html, body {
             height: 100%;
             margin: 0;
@@ -27,192 +26,217 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 16px 14px;
+            padding: 12px 14px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
-        /* 標題與資訊欄 */
         .header { text-align: center; }
         .title {
             color: #00873c;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
-            margin: 0 0 6px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            margin: 0 0 4px 0;
         }
         
         .info-bar {
             background: #f1f8e9;
-            border-radius: 12px;
-            padding: 8px 12px;
+            border-radius: 10px;
+            padding: 6px 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: #2e7d32;
             border: 1px solid #c8e6c9;
         }
 
-        .score-group span { font-size: 14px; }
-        .score-val { color: #00873c; font-size: 16px; font-weight: 900; }
+        .score-val { color: #00873c; font-size: 15px; font-weight: 900; }
         .correct-val { color: #2e7d32; }
         .wrong-val { color: #d32f2f; }
 
-        /* 口訣與警示提示 */
-        .rule-badge {
-            background: #fff8e1;
-            border: 1.5px dashed #ffa000;
-            color: #e65100;
-            padding: 6px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            text-align: center;
-            margin-top: 8px;
-        }
-
         .year-warning {
             background: #fff3e0;
-            border: 1.5px solid #ff9800;
+            border: 1px solid #ff9800;
             color: #e65100;
-            padding: 5px;
-            border-radius: 8px;
-            font-size: 12px;
+            padding: 4px;
+            border-radius: 6px;
+            font-size: 11px;
             font-weight: 700;
             text-align: center;
-            margin-top: 6px;
+            margin-top: 4px;
             display: none;
             animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
             0% { opacity: 0.8; }
-            50% { opacity: 1; transform: scale(1.02); }
+            50% { opacity: 1; transform: scale(1.01); }
             100% { opacity: 0.8; }
         }
 
         .section-label {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
             color: #424242;
-            margin: 8px 0 4px 2px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            margin: 4px 0 2px 2px;
         }
 
-        /* 卡片按鈕區 (3列 2行 網格) */
-        .card-grid {
+        /* 待選區 3x2 網格 */
+        .source-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            min-height: 95px;
+            gap: 6px;
+            min-height: 76px;
         }
 
         .date-card {
             background: linear-gradient(180deg, #009845 0%, #007b36 100%);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 18px;
+            border-radius: 8px;
+            font-size: 16px;
             font-weight: 800;
-            height: 44px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,135,60,0.25);
+            box-shadow: 0 3px 6px rgba(0,135,60,0.2);
             transition: all 0.15s ease;
             user-select: none;
         }
 
         .date-card:active { transform: scale(0.95); }
 
-        .date-card-target {
-            background: linear-gradient(180deg, #00a0e9 0%, #0082c3 100%);
-            box-shadow: 0 4px 8px rgba(0,160,233,0.25);
-        }
-
-        /* 下方放置區 */
-        .drop-zone {
-            background: #f5f7fa;
-            border: 2px dashed #b0bec5;
-            border-radius: 14px;
+        /* 直式貨架陳列區 */
+        .shelf-container {
+            background: #f4f6f8;
+            border: 2px solid #b0bec5;
+            border-radius: 12px;
             padding: 6px;
-            min-height: 106px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-height: 250px;
+            position: relative;
         }
 
-        /* 底部結果反饋與功能按鈕 */
+        .shelf-header-tag {
+            background: #78909c;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            align-self: flex-start;
+        }
+
+        .shelf-footer-tag {
+            background: #e65100;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            align-self: flex-start;
+            margin-top: auto;
+        }
+
+        .shelf-slot {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1.5px dashed #cfd8dc;
+            border-radius: 6px;
+            height: 33px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .shelf-card {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #00a0e9 0%, #0082c3 100%);
+            color: white;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,160,233,0.3);
+            cursor: pointer;
+        }
+
+        /* 底部控制區 */
         .feedback-area {
-            min-height: 24px;
-            font-size: 14px;
+            min-height: 20px;
+            font-size: 12px;
             font-weight: 800;
             text-align: center;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .text-success { color: #2e7d32; }
         .text-error { color: #c62828; }
 
-        .btn-group {
-            display: flex;
-            gap: 8px;
-        }
+        .btn-group { display: flex; gap: 6px; }
 
         .btn-action {
             flex: 1;
             border: none;
-            border-radius: 20px;
-            padding: 12px 0;
-            font-size: 15px;
+            border-radius: 16px;
+            padding: 10px 0;
+            font-size: 14px;
             font-weight: 800;
             cursor: pointer;
-            transition: opacity 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
         }
         
         .btn-check { background: #00873c; color: white; }
         .btn-next { background: #00a0e9; color: white; }
-        .btn-reset { background: #90a4ae; color: white; flex: 0.6; }
+        .btn-reset { background: #90a4ae; color: white; flex: 0.5; }
         .btn-action:active { opacity: 0.85; }
     </style>
 </head>
 <body>
 
 <div class="app-card">
-    <!-- 頂部區 -->
     <div class="header">
         <div class="title">🏪 惠心全家效期排面練習</div>
         <div class="info-bar">
-            <span id="today-display">📅 今日: --/--</span>
-            <div class="score-group">
+            <span id="today-display">📅 今日: --</span>
+            <div>
                 得分:<span class="score-val" id="total-score">0</span> ｜ 
                 對:<span class="correct-val" id="correct-count">0</span> 
                 錯:<span class="wrong-val" id="wrong-count">0</span>
             </div>
         </div>
-        <div class="rule-badge">
-            💡 快過期(數字小)放<b>前面(左)</b> ⬅️ ｜ 還久放<b>後面(右)</b> ➡️
-        </div>
         <div class="year-warning" id="year-notice">
-            ⚠️ 注意：這題有跨到明年喔！1 月要放在後面！
+            ⚠️ 注意：這題有跨到明年喔！1 月要放在最後面（最上面）！
         </div>
     </div>
 
-    <!-- 上方待選卡片區 -->
+    <!-- 待選區 -->
     <div>
-        <div class="section-label">👇 請點擊卡片（從近到遠排）：</div>
-        <div class="card-grid" id="source-tags"></div>
+        <div class="section-label">👇 選擇點擊卡片（擺入貨架）：</div>
+        <div class="source-grid" id="source-tags"></div>
     </div>
 
-    <!-- 下方排序結果區 -->
+    <!-- 直式貨架陳列區（視角修正：下方為最前面） -->
     <div>
-        <div class="section-label" style="color:#00a0e9;">📌 你的排序結果：</div>
-        <div class="drop-zone">
-            <div class="card-grid" id="target-tags"></div>
+        <div class="section-label" style="color:#00a0e9;">🛒 貨架縱深陳列（由內而外）：</div>
+        <div class="shelf-container">
+            <div class="shelf-header-tag">⬆️ 貨架最後面（遠效期 / 後賣）</div>
+            
+            <div class="shelf-slot" id="slot-5"></div>
+            <div class="shelf-slot" id="slot-4"></div>
+            <div class="shelf-slot" id="slot-3"></div>
+            <div class="shelf-slot" id="slot-2"></div>
+            <div class="shelf-slot" id="slot-1"></div>
+            <div class="shelf-slot" id="slot-0"></div>
+
+            <div class="shelf-footer-tag">⬇️ 貨架最前面（近效期 / 先賣）</div>
         </div>
     </div>
 
@@ -228,6 +252,62 @@
 </div>
 
 <script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playFamilyMartTheme() {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const notes = [
+            { freq: 698.46, duration: 0.22, time: 0 },
+            { freq: 587.33, duration: 0.22, time: 0.22 },
+            { freq: 440.00, duration: 0.22, time: 0.44 },
+            { freq: 587.33, duration: 0.22, time: 0.66 },
+            { freq: 659.25, duration: 0.22, time: 0.88 },
+            { freq: 880.00, duration: 0.5,  time: 1.10 }
+        ];
+        notes.forEach(note => {
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = note.freq;
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime + note.time);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + note.time + note.duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime + note.time);
+            osc.stop(audioCtx.currentTime + note.time + note.duration);
+        });
+    }
+
+    function playClickSound() {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        let osc = audioCtx.createOscillator();
+        let gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+    }
+
+    function playErrorSound() {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        let osc = audioCtx.createOscillator();
+        let gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+    }
+
     let currentCards = [];
     let userAnswers = [];
     let score = 0;
@@ -236,12 +316,16 @@
     let isChecked = false;
 
     const today = new Date();
-    document.getElementById('today-display').innerText = `📅 今日: ${today.getMonth() + 1}/${today.getDate()}`;
+    document.getElementById('today-display').innerText = `📅 今日: ${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
 
     function generateQuestion() {
         document.getElementById('feedback').innerText = '';
-        document.getElementById('target-tags').innerHTML = '';
         document.getElementById('year-notice').style.display = 'none';
+        
+        for(let i=0; i<6; i++) {
+            document.getElementById(`slot-${i}`).innerHTML = '';
+        }
+        
         userAnswers = [];
         isChecked = false;
         
@@ -288,31 +372,39 @@
     }
 
     function selectTag(cardObj, element) {
-        if (element.style.visibility === 'hidden') return;
+        if (element.style.visibility === 'hidden' || userAnswers.length >= 6) return;
+        playClickSound();
         element.style.visibility = 'hidden';
+        
+        let targetSlotIndex = userAnswers.length;
         userAnswers.push(cardObj);
 
-        const targetContainer = document.getElementById('target-tags');
+        let slotEl = document.getElementById(`slot-${targetSlotIndex}`);
         let div = document.createElement('div');
-        div.className = 'date-card date-card-target';
+        div.className = 'shelf-card';
         div.innerText = cardObj.display;
-        div.onclick = () => deselectTag(cardObj, element, div);
-        targetContainer.appendChild(div);
+        div.onclick = () => deselectTag(cardObj, element, targetSlotIndex);
+        slotEl.appendChild(div);
     }
 
-    function deselectTag(cardObj, sourceElement, targetElement) {
+    function deselectTag(cardObj, sourceElement, slotIndex) {
         if (isChecked) return;
-        sourceElement.style.visibility = 'visible';
-        targetElement.remove();
-        userAnswers = userAnswers.filter(c => c.timestamp !== cardObj.timestamp);
+        playClickSound();
+        
+        if (slotIndex === userAnswers.length - 1) {
+            sourceElement.style.visibility = 'visible';
+            document.getElementById(`slot-${slotIndex}`).innerHTML = '';
+            userAnswers.pop();
+        }
     }
 
     function checkAnswer() {
         if (isChecked) return;
 
         if (userAnswers.length < currentCards.length) {
+            playErrorSound();
             document.getElementById('feedback').className = 'feedback-area text-error';
-            document.getElementById('feedback').innerText = '請先選完所有 6 張卡片喔！';
+            document.getElementById('feedback').innerText = '請選滿 6 張卡片擺好貨架喔！';
             return;
         }
 
@@ -323,15 +415,17 @@
 
         const feedbackEl = document.getElementById('feedback');
         if (isCorrect) {
+            playFamilyMartTheme();
             score += 10;
             correctCount += 1;
             feedbackEl.className = 'feedback-area text-success';
-            feedbackEl.innerText = '🎉 太棒了！惠心全對了！+10分';
+            feedbackEl.innerText = '🎉 太棒了！貨架陳列完全正確！+10分';
         } else {
+            playErrorSound();
             wrongCount += 1;
             feedbackEl.className = 'feedback-area text-error';
-            let sortedDisplays = sorted.map(c => c.display).join(' ➡️ ');
-            feedbackEl.innerText = '❌ 正確順序：' + sortedDisplays;
+            let sortedDisplays = sorted.map(c => c.display).join(' (前) ⬅️ ');
+            feedbackEl.innerText = '❌ 從前到後應為：' + sortedDisplays;
         }
 
         updateScoreBoard();
@@ -344,6 +438,7 @@
     }
 
     function resetScore() {
+        playClickSound();
         score = 0;
         correctCount = 0;
         wrongCount = 0;
