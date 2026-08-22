@@ -169,7 +169,6 @@
             cursor: pointer;
         }
 
-        /* 底部控制區 */
         .feedback-area {
             min-height: 20px;
             font-size: 12px;
@@ -203,7 +202,7 @@
 
 <div class="app-card">
     <div class="header">
-        <div class="title">🏪 惠心全家效期排面練習</div>
+        <div class="title">🏪 惠心的全家效期排面練習</div>
         <div class="info-bar">
             <span id="today-display">📅 今日: --</span>
             <div>
@@ -217,13 +216,11 @@
         </div>
     </div>
 
-    <!-- 待選區 -->
     <div>
         <div class="section-label">👇 選擇點擊卡片（擺入貨架）：</div>
         <div class="source-grid" id="source-tags"></div>
     </div>
 
-    <!-- 直式貨架陳列區（視角修正：下方為最前面） -->
     <div>
         <div class="section-label" style="color:#00a0e9;">🛒 貨架縱深陳列（由內而外）：</div>
         <div class="shelf-container">
@@ -240,7 +237,6 @@
         </div>
     </div>
 
-    <!-- 底部控制區 -->
     <div>
         <div class="feedback-area" id="feedback"></div>
         <div class="btn-group">
@@ -332,8 +328,24 @@
         let cards = [];
         let hasCrossYear = false;
 
+        // 1. 強制生成 2 個不重複的近效期日期 (1 ~ 6 天之內)
+        while(cards.length < 2) {
+            let nearDays = Math.floor(Math.random() * 6) + 1; // 1 ~ 6 天
+            let nearDate = new Date(today.getTime());
+            nearDate.setDate(today.getDate() + nearDays);
+            
+            let displayStr = `${nearDate.getMonth() + 1}/${nearDate.getDate()}`;
+            if (!cards.some(c => c.display === displayStr)) {
+                cards.push({
+                    display: displayStr,
+                    timestamp: new Date(nearDate.getFullYear(), nearDate.getMonth(), nearDate.getDate()).getTime()
+                });
+            }
+        }
+
+        // 2. 生成其餘 4 個日期 (7天 ~ 85天)
         while(cards.length < 6) {
-            let addDays = Math.floor(Math.random() * 85) + 1;
+            let addDays = Math.floor(Math.random() * 79) + 7;
             let futureDate = new Date(today.getTime());
             futureDate.setDate(today.getDate() + addDays);
 
