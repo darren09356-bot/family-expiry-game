@@ -26,32 +26,32 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 12px 14px;
+            padding: 10px 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
         .header { text-align: center; }
         .title {
             color: #00873c;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 800;
-            margin: 0 0 4px 0;
+            margin: 0 0 2px 0;
         }
         
         .info-bar {
             background: #f1f8e9;
-            border-radius: 10px;
-            padding: 6px 10px;
+            border-radius: 8px;
+            padding: 4px 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #2e7d32;
             border: 1px solid #c8e6c9;
         }
 
-        .score-val { color: #00873c; font-size: 15px; font-weight: 900; }
+        .score-val { color: #00873c; font-size: 14px; font-weight: 900; }
         .correct-val { color: #2e7d32; }
         .wrong-val { color: #d32f2f; }
 
@@ -59,12 +59,12 @@
             background: #fff3e0;
             border: 1px solid #ff9800;
             color: #e65100;
-            padding: 4px;
+            padding: 3px;
             border-radius: 6px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             text-align: center;
-            margin-top: 4px;
+            margin-top: 3px;
             display: none;
             animation: pulse 1.5s infinite;
         }
@@ -76,18 +76,18 @@
         }
 
         .section-label {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             color: #424242;
-            margin: 4px 0 2px 2px;
+            margin: 3px 0 2px 2px;
         }
 
         /* 待選區 3x2 網格 */
         .source-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            min-height: 76px;
+            gap: 5px;
+            min-height: 68px;
         }
 
         .date-card {
@@ -95,14 +95,14 @@
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
-            height: 35px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 3px 6px rgba(0,135,60,0.2);
+            box-shadow: 0 2px 5px rgba(0,135,60,0.2);
             transition: all 0.15s ease;
             user-select: none;
         }
@@ -113,21 +113,20 @@
         .shelf-container {
             background: #f4f6f8;
             border: 2px solid #b0bec5;
-            border-radius: 12px;
-            padding: 6px;
+            border-radius: 10px;
+            padding: 4px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            min-height: 250px;
+            gap: 3px;
             position: relative;
         }
 
         .shelf-header-tag {
             background: #78909c;
             color: white;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
             align-self: flex-start;
         }
@@ -135,19 +134,18 @@
         .shelf-footer-tag {
             background: #e65100;
             color: white;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
             align-self: flex-start;
-            margin-top: auto;
         }
 
         .shelf-slot {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.75);
             border: 1.5px dashed #cfd8dc;
             border-radius: 6px;
-            height: 33px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -160,36 +158,64 @@
             background: linear-gradient(180deg, #00a0e9 0%, #0082c3 100%);
             color: white;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,160,233,0.3);
+            box-shadow: 0 2px 4px rgba(0,160,233,0.3);
             cursor: pointer;
         }
 
+        /* 站在貨架前的人形視覺區（黃金比例重劃版） */
+        .person-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        /* 向上伸手微動效 */
+        .hand-reach {
+            animation: reachAnimation 2.2s ease-in-out infinite;
+            transform-origin: center bottom;
+        }
+
+        @keyframes reachAnimation {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .person-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: #00a0e9;
+            margin-top: -1px;
+        }
+
+        /* 底部控制區 */
         .feedback-area {
-            min-height: 20px;
-            font-size: 12px;
+            min-height: 18px;
+            font-size: 11px;
             font-weight: 800;
             text-align: center;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .text-success { color: #2e7d32; }
         .text-error { color: #c62828; }
 
-        .btn-group { display: flex; gap: 6px; }
+        .btn-group { display: flex; gap: 5px; }
 
         .btn-action {
             flex: 1;
             border: none;
-            border-radius: 16px;
-            padding: 10px 0;
-            font-size: 14px;
+            border-radius: 14px;
+            padding: 8px 0;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
         
         .btn-check { background: #00873c; color: white; }
@@ -234,6 +260,26 @@
             <div class="shelf-slot" id="slot-0"></div>
 
             <div class="shelf-footer-tag">⬇️ 貨架最前面（近效期 / 先賣）</div>
+        </div>
+
+        <!-- 惠心人形圖示（優化肩寬 58px 軀幹與手臂弧度） -->
+        <div class="person-container">
+            <svg width="120" height="48" viewBox="0 0 140 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- 軀幹（肩膀）：黃金比例 58px 寬度，圓角 rx=8 -->
+                <rect x="41" y="37" width="58" height="15" rx="7.5" fill="#00a0e9"/>
+
+                <!-- 伸向貨架的雙手剪影 (帶有輕微向上伸手微動效) -->
+                <g class="hand-reach">
+                    <!-- 左手臂與手掌 -->
+                    <path d="M 42 41 C 32 30, 34 15, 44 6 C 49 3, 54 10, 49 17 C 44 25, 47 33, 50 40 Z" fill="#00a0e9"/>
+                    <!-- 右手臂與手掌 -->
+                    <path d="M 98 41 C 108 30, 106 15, 96 6 C 91 3, 86 10, 91 17 C 96 25, 93 33, 90 40 Z" fill="#00a0e9"/>
+                </g>
+
+                <!-- 頭部俯視圓形剪影（正居中 cx=70） -->
+                <circle cx="70" cy="32" r="13.5" fill="#00a0e9"/>
+            </svg>
+            <div class="person-label">🙋‍♀️ 惠心站在這裡，手向前把商品放進去</div>
         </div>
     </div>
 
@@ -328,9 +374,9 @@
         let cards = [];
         let hasCrossYear = false;
 
-        // 1. 強制生成 2 個不重複的近效期日期 (1 ~ 6 天之內)
+        // 1. 生成 2 個近效期日期 (1 ~ 6 天之內)
         while(cards.length < 2) {
-            let nearDays = Math.floor(Math.random() * 6) + 1; // 1 ~ 6 天
+            let nearDays = Math.floor(Math.random() * 6) + 1;
             let nearDate = new Date(today.getTime());
             nearDate.setDate(today.getDate() + nearDays);
             
